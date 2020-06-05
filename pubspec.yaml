@@ -1,0 +1,16 @@
+name: glitters
+description: A glittering widget for Flutter.
+version: 0.0.1
+author: kaboc <kaboc.app@gmail.com>
+homepage: https://github.com/kaboc/flutter_glitters
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
