@@ -26,7 +26,7 @@ class Glitters extends StatefulWidget {
         _outDuration = outDuration ?? kDefaultOutDuration,
         _interval = interval ?? kDefaultInterval,
         _color = color ?? kDefaultColor,
-        _maxOpacity = maxOpacity ?? 0.4,
+        _maxOpacity = maxOpacity ?? 1.0,
         super(key: key);
 
   final double _minSize;
@@ -177,7 +177,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
       builder: (_, __) => CustomPaint(
         size: Size(widget.constraints.maxWidth, widget.constraints.maxHeight),
         painter: GlitterPainter(
-          actualSize: widget.size,
+          squareSize: widget.size,
           offset: widget.offset,
           aspectRatio: kDefaultAspectRatio,
           color: widget.color,

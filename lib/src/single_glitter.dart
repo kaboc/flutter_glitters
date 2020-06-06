@@ -26,7 +26,7 @@ class SingleGlitter extends StatelessWidget {
     return CustomPaint(
       size: Size(size * _aspectRatio, size),
       painter: GlitterPainter(
-        actualSize: size,
+        squareSize: size,
         offset: Offset.zero,
         aspectRatio: _aspectRatio,
         color: _color,

@@ -1,7 +1,9 @@
 import 'package:flutter/painting.dart';
 
-const double kDefaultSize = 10.0;
-const double kDefaultAspectRatio = 0.7;
+const double kDefaultSize = 20.0;
+const double kCircleSizeRatio = 0.55;
+const double kMinLineWidth = 3.0;
+const double kDefaultAspectRatio = 1.0;
 const Duration kDefaultDuration = Duration(milliseconds: 150);
 const Duration kDefaultInDuration = Duration(milliseconds: 150);
 const Duration kDefaultOutDuration = Duration(milliseconds: 200);
