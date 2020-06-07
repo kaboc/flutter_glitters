@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'consts.dart';
 import 'painter.dart';
@@ -7,8 +7,8 @@ import 'painter.dart';
 class Glitters extends StatefulWidget {
   const Glitters({
     Key key,
-    double maxSize,
     double minSize,
+    double maxSize,
     Duration duration,
     Duration inDuration,
     Duration outDuration,

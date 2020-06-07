@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'consts.dart';
 import 'painter.dart';
 
 class SingleGlitter extends StatelessWidget {
   const SingleGlitter({
+    Key key,
     @required this.size,
     double aspectRatio,
     Color color,

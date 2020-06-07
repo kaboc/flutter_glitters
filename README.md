@@ -6,5 +6,6 @@ A glittering widget for Flutter.
 
 ## Note
 
-Glitters uses `LayoutBuilder` for obtaining the constraints to decide on a drawing position.
-Make sure that it is not unconstrained to avoid a related error.
+Glitters uses [LayoutBuilder](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html)
+for obtaining the constraints to decide on drawing positions.
+Make sure that it is not unconstrained to avoid related errors.

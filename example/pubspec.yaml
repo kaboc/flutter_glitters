@@ -1,6 +1,5 @@
 name: glitters_example
-description: A new Flutter project.
-publish_to: 'none'
+description: An example of Glitters.
 version: 1.0.0+1
 
 environment:
@@ -12,6 +11,3 @@ dependencies:
 
   glitters:
     path: ../
-
-#flutter:
-#  uses-material-design: true
