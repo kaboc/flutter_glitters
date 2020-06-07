@@ -1,3 +1,7 @@
+## 0.1.0 - 7 June 2020
+
+* Release as a public package.
+
 ## 0.0.2 - 6 June 2020
 
 * More real look with better shape and gradient.

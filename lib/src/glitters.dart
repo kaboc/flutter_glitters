@@ -4,6 +4,20 @@ import 'package:flutter/widgets.dart';
 import 'consts.dart';
 import 'painter.dart';
 
+/// A widget that fades in and out glitter-like shapes one by one inside itself.
+///
+/// A glitter is sized between [minSize] and [maxSize] for every animation
+/// and shown with the [color].
+/// It fades in and reaches [maxOpacity] over the duration of [inDuration],
+/// stays for the span of [duration], and then fades out over [outDuration].
+/// The next animation begins after a wait of [interval] duration.
+///
+/// The size of the widget itself is calculated using the constraints obtained
+/// by [LayoutBuilder], and glitters are randomly positioned within the area.
+/// An error will occur if the widget is unconstrained.
+///
+/// Only a single glitter is shown at a time. Stack multiple glitters to display
+/// them concurrently.
 class Glitters extends StatefulWidget {
   const Glitters({
     Key key,
@@ -19,24 +33,41 @@ class Glitters extends StatefulWidget {
             (minSize > 0.0 && maxSize >= (minSize ?? kDefaultSize))),
         assert(maxSize == null || maxSize > 0.0),
         assert(maxOpacity == null || (maxOpacity > 0.0 && maxOpacity <= 1.0)),
-        _minSize = minSize ?? kDefaultSize,
-        _maxSize = maxSize ?? kDefaultSize,
-        _duration = duration ?? kDefaultDuration,
-        _inDuration = inDuration ?? kDefaultInDuration,
-        _outDuration = outDuration ?? kDefaultOutDuration,
-        _interval = interval ?? kDefaultInterval,
-        _color = color ?? kDefaultColor,
-        _maxOpacity = maxOpacity ?? 1.0,
+        minSize = minSize ?? kDefaultSize,
+        maxSize = maxSize ?? kDefaultSize,
+        duration = duration ?? kDefaultDuration,
+        inDuration = inDuration ?? kDefaultInDuration,
+        outDuration = outDuration ?? kDefaultOutDuration,
+        interval = interval ?? kDefaultInterval,
+        color = color ?? kDefaultColor,
+        maxOpacity = maxOpacity ?? 1.0,
         super(key: key);
 
-  final double _minSize;
-  final double _maxSize;
-  final Duration _duration;
-  final Duration _inDuration;
-  final Duration _outDuration;
-  final Duration _interval;
-  final Color _color;
-  final double _maxOpacity;
+  /// The minimum size of a glitter shown inside the widget.
+  final double minSize;
+
+  /// The maximum size of a glitter shown inside the widget.
+  final double maxSize;
+
+  /// The duration in which a glitter is shown with the maximum opacity.
+  /// This does not include the durations of fade-in/out and the interval
+  /// between glitters.
+  final Duration duration;
+
+  /// The duration over which a glitter fades in.
+  final Duration inDuration;
+
+  /// The duration over which a glitter fades out.
+  final Duration outDuration;
+
+  /// The duration of a wait between a glitter and the next one.
+  final Duration interval;
+
+  /// The main color of glitters.
+  final Color color;
+
+  /// The maximum opacity that glitters fade in up to and out from.
+  final double maxOpacity;
 
   @override
   _GlittersState createState() => _GlittersState();
@@ -54,10 +85,10 @@ class _GlittersState extends State<Glitters>
 
     _controller = AnimationController(
       vsync: this,
-      duration: widget._duration +
-          widget._inDuration +
-          widget._outDuration +
-          widget._interval,
+      duration: widget.duration +
+          widget.inDuration +
+          widget.outDuration +
+          widget.interval,
     )
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
@@ -90,11 +121,11 @@ class _GlittersState extends State<Glitters>
           Random().nextDouble() * (constraints.maxWidth - width),
           Random().nextDouble() * (constraints.maxHeight - height),
         ),
-        duration: widget._duration,
-        inDuration: widget._inDuration,
-        outDuration: widget._outDuration,
-        color: widget._color,
-        maxOpacity: widget._maxOpacity,
+        duration: widget.duration,
+        inDuration: widget.inDuration,
+        outDuration: widget.outDuration,
+        color: widget.color,
+        maxOpacity: widget.maxOpacity,
       );
     });
   }
@@ -102,8 +133,8 @@ class _GlittersState extends State<Glitters>
   void _renew() {
     setState(() {
       _key = UniqueKey();
-      _size = Random().nextDouble() * (widget._maxSize - widget._minSize) +
-          widget._minSize;
+      _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
+          widget.minSize;
     });
   }
 }
