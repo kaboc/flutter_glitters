@@ -1,3 +1,8 @@
+## 0.1.1 - 10 June 2020
+
+* Improve handling of default sizes.
+* Update README.
+
 ## 0.1.0 - 7 June 2020
 
 * Release as a public package.
