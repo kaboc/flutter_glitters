@@ -50,7 +50,7 @@ class GlitterPainter extends CustomPainter {
         ),
     );
 
-    final double crossWidth = min(kMinCrossWidth, squareSize / 10);
+    final double crossWidth = max(kMinCrossWidth, squareSize / 16);
     final double crossHalfWidth = crossWidth / 2;
 
     final Path crossPath = Path()

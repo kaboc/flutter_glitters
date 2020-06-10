@@ -30,11 +30,12 @@ class Glitters extends StatefulWidget {
     Color color,
     double maxOpacity,
   })  : assert(minSize == null ||
-            (minSize > 0.0 && maxSize >= (minSize ?? kDefaultSize))),
-        assert(maxSize == null || maxSize > 0.0),
+            (minSize > 0.0 && (maxSize == null || maxSize >= minSize))),
+        assert(maxSize == null ||
+            (maxSize > 0.0 && (minSize == null || minSize <= maxSize))),
         assert(maxOpacity == null || (maxOpacity > 0.0 && maxOpacity <= 1.0)),
         minSize = minSize ?? kDefaultSize,
-        maxSize = maxSize ?? kDefaultSize,
+        maxSize = maxSize ?? (minSize ?? kDefaultSize),
         duration = duration ?? kDefaultDuration,
         inDuration = inDuration ?? kDefaultInDuration,
         outDuration = outDuration ?? kDefaultOutDuration,
