@@ -80,17 +80,17 @@ class _GlittersState extends State<Glitters>
   double _size;
   Key _key;
 
+  Duration get _duration =>
+      widget.duration +
+      widget.inDuration +
+      widget.outDuration +
+      widget.interval;
+
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration +
-          widget.inDuration +
-          widget.outDuration +
-          widget.interval,
-    )
+    _controller = AnimationController(vsync: this, duration: _duration)
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           _renew();
@@ -100,6 +100,21 @@ class _GlittersState extends State<Glitters>
       ..forward();
 
     _renew();
+  }
+
+  @override
+  void didUpdateWidget(Glitters oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.duration != oldWidget.duration ||
+        widget.inDuration != oldWidget.inDuration ||
+        widget.outDuration != oldWidget.outDuration ||
+        widget.interval != oldWidget.interval) {
+      _controller
+        ..stop()
+        ..duration = _duration
+        ..forward(from: 0.0);
+    }
   }
 
   @override

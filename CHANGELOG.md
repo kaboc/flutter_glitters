@@ -1,3 +1,9 @@
+## 0.1.2 - 1 July 2020
+
+* Tweak minimum cross width.
+* Improve gradient/opacity of inner whitish circle.
+* Enable durations to be updated by Hot Reload. 
+
 ## 0.1.1 - 10 June 2020
 
 * Improve handling of default sizes.
