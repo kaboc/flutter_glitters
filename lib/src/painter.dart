@@ -40,13 +40,30 @@ class GlitterPainter extends CustomPainter {
       paint
         ..shader = RadialGradient(
           colors: <Color>[
-            const Color(0xFFFFFFFF).withOpacity(opacity),
             color.withOpacity(opacity),
+            color.withOpacity(opacity * 0.7),
             color.withOpacity(0.0),
           ],
-          stops: const <double>[0.2, 0.5, 1.0],
+          stops: const <double>[0.0, 0.6, 1.0],
         ).createShader(
           Rect.fromCircle(center: center, radius: radius),
+        ),
+    );
+
+    final Path smallerCirclePath = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: radius * 0.6));
+
+    canvas.drawPath(
+      smallerCirclePath,
+      paint
+        ..shader = RadialGradient(
+          colors: <Color>[
+            const Color(0xFFFFFFFF).withOpacity(opacity * 0.9),
+            const Color(0x00FFFFFF),
+          ],
+          stops: const <double>[0.4, 1.0],
+        ).createShader(
+          Rect.fromCircle(center: center, radius: radius * 0.6),
         ),
     );
 
