@@ -1,5 +1,7 @@
 # Glitters
 
+![Pub Version](https://img.shields.io/pub/v/glitters)
+
 A glittering widget for Flutter.
 
 ![Screencast](https://user-images.githubusercontent.com/20254485/83968159-29878f00-a902-11ea-8c95-320154181eb6.gif)

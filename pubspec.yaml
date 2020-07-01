@@ -1,6 +1,6 @@
 name: glitters
-description: A glittering widget for Flutter.
 version: 0.1.1
+description: A glittering widget for Flutter, handy for making some part of your app a little shiny.
 homepage: https://github.com/kaboc/flutter_glitters
 
 environment:
