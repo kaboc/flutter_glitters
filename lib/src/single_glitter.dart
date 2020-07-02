@@ -3,12 +3,17 @@ import 'package:flutter/widgets.dart';
 import 'consts.dart';
 import 'painter.dart';
 
-/// A widget to draw a single static glitter-like shape.
+/// A widget that draws a single static glitter-like shape.
 ///
-/// A single glitter with the [color] is displayed at the [aspectRatio] to
-/// fit the [size].
-/// Unlike [Glitters], this has the fixed [opacity] and does not animate.
+/// This widget may be useful when [Glitters] does not meet your needs
+/// and you want to instead use only the glitter shape differently for
+/// your own usage.
 class SingleGlitter extends StatelessWidget {
+  /// Creates a widget that draws a single static glitter-like shape.
+  ///
+  /// A single glitter with the [color] is displayed at the [aspectRatio] to
+  /// fit the [size].
+  /// Unlike [Glitters], this has the fixed [opacity] and does not animate.
   const SingleGlitter({
     Key key,
     @required this.size,

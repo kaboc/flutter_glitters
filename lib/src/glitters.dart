@@ -6,12 +6,6 @@ import 'painter.dart';
 
 /// A widget that fades in and out glitter-like shapes one by one inside itself.
 ///
-/// A glitter is sized between [minSize] and [maxSize] for every animation
-/// and shown with the [color].
-/// It fades in and reaches [maxOpacity] over the duration of [inDuration],
-/// stays for the span of [duration], and then fades out over [outDuration].
-/// The next animation begins after a wait of [interval] duration.
-///
 /// The size of the widget itself is calculated using the constraints obtained
 /// by [LayoutBuilder], and glitters are randomly positioned within the area.
 /// An error will occur if the widget is unconstrained.
@@ -19,6 +13,13 @@ import 'painter.dart';
 /// Only a single glitter is shown at a time. Stack multiple glitters to display
 /// them concurrently.
 class Glitters extends StatefulWidget {
+  /// Creates a widget that fades in and out glitter-like shapes one by one.
+  ///
+  /// Each glitter is sized between [minSize] and [maxSize] for every animation
+  /// and shown with the [color].
+  /// It fades in and reaches [maxOpacity] over the duration of [inDuration],
+  /// stays for the span of [duration], and then fades out over [outDuration].
+  /// The next animation begins after a wait of [interval] duration.
   const Glitters({
     Key key,
     double minSize,
@@ -61,7 +62,7 @@ class Glitters extends StatefulWidget {
   /// The duration over which a glitter fades out.
   final Duration outDuration;
 
-  /// The duration of a wait between a glitter and the next one.
+  /// The duration of a wait between each glitter and the next.
   final Duration interval;
 
   /// The main color of glitters.
