@@ -1,3 +1,8 @@
+## 0.1.3 - 2 July 2020
+
+* Update documentation.
+* Tweak circle size.
+
 ## 0.1.2 - 1 July 2020
 
 * Tweak minimum cross width.

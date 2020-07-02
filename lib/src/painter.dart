@@ -30,7 +30,7 @@ class GlitterPainter extends CustomPainter {
     final double width = squareSize * shrinkageRateX;
     final double height = squareSize * shrinkageRateY;
     final Offset center = Offset(offset.dx + width / 2, offset.dy + height / 2);
-    final double radius = min(squareSize, squareSize) * kCircleSizeRatio / 2;
+    final double radius = min(squareSize, squareSize) * kCircleSizeRatio * 0.55;
 
     final Path circlePath = Path()
       ..addOval(Rect.fromCircle(center: center, radius: radius));
@@ -44,14 +44,13 @@ class GlitterPainter extends CustomPainter {
             color.withOpacity(opacity * 0.7),
             color.withOpacity(0.0),
           ],
-          stops: const <double>[0.0, 0.6, 1.0],
         ).createShader(
           Rect.fromCircle(center: center, radius: radius),
         ),
     );
 
     final Path smallerCirclePath = Path()
-      ..addOval(Rect.fromCircle(center: center, radius: radius * 0.6));
+      ..addOval(Rect.fromCircle(center: center, radius: radius * 0.5));
 
     canvas.drawPath(
       smallerCirclePath,
@@ -63,7 +62,7 @@ class GlitterPainter extends CustomPainter {
           ],
           stops: const <double>[0.4, 1.0],
         ).createShader(
-          Rect.fromCircle(center: center, radius: radius * 0.6),
+          Rect.fromCircle(center: center, radius: radius * 0.5),
         ),
     );
 
