@@ -21,18 +21,18 @@ class GlitterPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
+    final paint = Paint()
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 
-    final double shrinkageRateX = min(1.0, aspectRatio);
-    final double shrinkageRateY = min(1.0, 1.0 / aspectRatio);
-    final double width = squareSize * shrinkageRateX;
-    final double height = squareSize * shrinkageRateY;
-    final Offset center = Offset(offset.dx + width / 2, offset.dy + height / 2);
-    final double radius = min(squareSize, squareSize) * kCircleSizeRatio * 0.55;
+    final shrinkageRateX = min(1.0, aspectRatio);
+    final shrinkageRateY = min(1.0, 1.0 / aspectRatio);
+    final width = squareSize * shrinkageRateX;
+    final height = squareSize * shrinkageRateY;
+    final center = Offset(offset.dx + width / 2, offset.dy + height / 2);
+    final radius = min(squareSize, squareSize) * kCircleSizeRatio * 0.55;
 
-    final Path circlePath = Path()
+    final circlePath = Path()
       ..addOval(Rect.fromCircle(center: center, radius: radius));
 
     canvas.drawPath(
@@ -49,7 +49,7 @@ class GlitterPainter extends CustomPainter {
         ),
     );
 
-    final Path smallerCirclePath = Path()
+    final smallerCirclePath = Path()
       ..addOval(Rect.fromCircle(center: center, radius: radius * 0.5));
 
     canvas.drawPath(
@@ -66,10 +66,10 @@ class GlitterPainter extends CustomPainter {
         ),
     );
 
-    final double crossWidth = max(kMinCrossWidth, squareSize / 17);
-    final double crossHalfWidth = crossWidth / 2;
+    final crossWidth = max(kMinCrossWidth, squareSize / 17);
+    final crossHalfWidth = crossWidth / 2;
 
-    final Path crossPath = Path()
+    final crossPath = Path()
       ..moveTo(center.dx - crossHalfWidth, center.dy - crossHalfWidth)
       ..lineTo(center.dx, offset.dy)
       ..lineTo(center.dx + crossHalfWidth, center.dy - crossHalfWidth)

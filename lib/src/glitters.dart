@@ -127,8 +127,8 @@ class _GlittersState extends State<Glitters>
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, BoxConstraints constraints) {
-      final double width = _size * kDefaultAspectRatio;
-      final double height = _size;
+      final width = _size * kDefaultAspectRatio;
+      final height = _size;
 
       return _Paint(
         key: _key,
@@ -190,8 +190,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    final Duration duration =
-        widget.duration + widget.inDuration + widget.outDuration;
+    final duration = widget.duration + widget.inDuration + widget.outDuration;
 
     _controller = AnimationController(vsync: this, duration: duration)
       ..forward();
