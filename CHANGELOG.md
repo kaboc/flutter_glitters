@@ -1,3 +1,8 @@
+## 0.1.4 - 23 October 2020
+
+* Change minimum SDK version to 2.9.0 to be compatible with the latest Flutter version.
+* Update linter rules and change code accordingly (mainly removal of local variable types).
+
 ## 0.1.3 - 2 July 2020
 
 * Update documentation.
