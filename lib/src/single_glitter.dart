@@ -17,19 +17,16 @@ class SingleGlitter extends StatelessWidget {
   ///
   /// This widget looks better in a dark background color.
   const SingleGlitter({
-    Key key,
+    Key? key,
     this.maxWidth,
     this.maxHeight,
-    double aspectRatio,
-    Color color,
-    double opacity,
+    this.aspectRatio = 1.0,
+    this.color = kDefaultColor,
+    this.opacity = 1.0,
   })  : assert(maxWidth == null || maxWidth > 0.0),
         assert(maxHeight == null || maxHeight > 0.0),
-        assert(aspectRatio == null || aspectRatio > 0.0),
-        assert(opacity == null || (opacity > 0.0 && opacity <= 1.0)),
-        aspectRatio = aspectRatio ?? 1.0,
-        color = color ?? kDefaultColor,
-        opacity = opacity ?? 1.0,
+        assert(aspectRatio > 0.0),
+        assert(opacity > 0.0 && opacity <= 1.0),
         super(key: key);
 
   /// The max width of the widget.
@@ -40,7 +37,7 @@ class SingleGlitter extends StatelessWidget {
   ///
   /// The actual width of the widget may become smaller depending on
   /// the [height] and the [aspectRatio].
-  final double maxWidth;
+  final double? maxWidth;
 
   /// The max height of the widget.
   ///
@@ -50,7 +47,7 @@ class SingleGlitter extends StatelessWidget {
   ///
   /// The actual height of the widget may become smaller depending on
   /// the [width] and the [aspectRatio].
-  final double maxHeight;
+  final double? maxHeight;
 
   /// The aspect ratio (a ratio of width to height) of the widget.
   final double aspectRatio;
@@ -72,7 +69,7 @@ class SingleGlitter extends StatelessWidget {
               );
             },
           )
-        : _paint(maxWidth, maxHeight);
+        : _paint(maxWidth!, maxHeight!);
   }
 
   Widget _paint(double maxWidth, double maxHeight) {

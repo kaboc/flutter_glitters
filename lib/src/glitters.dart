@@ -23,28 +23,19 @@ class Glitters extends StatefulWidget {
   ///
   /// This widget looks better in a dark background color.
   const Glitters({
-    Key key,
-    double minSize,
-    double maxSize,
-    Duration duration,
-    Duration inDuration,
-    Duration outDuration,
-    Duration interval,
-    Color color,
-    double maxOpacity,
-  })  : assert(minSize == null ||
-            (minSize > 0.0 && (maxSize == null || maxSize >= minSize))),
-        assert(maxSize == null ||
-            (maxSize > 0.0 && (minSize == null || minSize <= maxSize))),
-        assert(maxOpacity == null || (maxOpacity > 0.0 && maxOpacity <= 1.0)),
-        minSize = minSize ?? kDefaultSize,
-        maxSize = maxSize ?? (minSize ?? kDefaultSize),
-        duration = duration ?? kDefaultDuration,
-        inDuration = inDuration ?? kDefaultInDuration,
-        outDuration = outDuration ?? kDefaultOutDuration,
-        interval = interval ?? kDefaultInterval,
-        color = color ?? kDefaultColor,
-        maxOpacity = maxOpacity ?? 1.0,
+    Key? key,
+    this.minSize = kDefaultSize,
+    double? maxSize,
+    this.duration = kDefaultDuration,
+    this.inDuration = kDefaultInDuration,
+    this.outDuration = kDefaultOutDuration,
+    this.interval = kDefaultInterval,
+    this.color = kDefaultColor,
+    this.maxOpacity = 1.0,
+  })  : assert(minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
+        assert(maxSize == null || (maxSize > 0.0 && minSize <= maxSize)),
+        assert(maxOpacity > 0.0 && maxOpacity <= 1.0),
+        maxSize = maxSize ?? minSize,
         super(key: key);
 
   /// The minimum size of a glitter shown inside the widget.
@@ -79,9 +70,9 @@ class Glitters extends StatefulWidget {
 
 class _GlittersState extends State<Glitters>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  double _size;
-  Key _key;
+  late AnimationController _controller;
+  late double _size;
+  late Key _key;
 
   Duration get _duration =>
       widget.duration +
@@ -160,15 +151,15 @@ class _GlittersState extends State<Glitters>
 
 class _Paint extends StatefulWidget {
   const _Paint({
-    Key key,
-    @required this.constraints,
-    @required this.size,
-    @required this.offset,
-    this.duration,
-    this.inDuration,
-    this.outDuration,
-    this.color,
-    this.maxOpacity,
+    Key? key,
+    required this.constraints,
+    required this.size,
+    required this.offset,
+    required this.duration,
+    required this.inDuration,
+    required this.outDuration,
+    required this.color,
+    required this.maxOpacity,
   }) : super(key: key);
 
   final BoxConstraints constraints;
@@ -185,8 +176,8 @@ class _Paint extends StatefulWidget {
 }
 
 class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _opacity;
+  late final AnimationController _controller;
+  late final Animation<double> _opacity;
 
   @override
   void initState() {

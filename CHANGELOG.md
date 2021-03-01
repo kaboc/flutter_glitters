@@ -1,7 +1,12 @@
+## 0.2.0
+
+- Migrate to null safety.
+
 ## 0.1.5
 
 - Fix wrong size of SingleGlitter (#1).
-- BREAKING CHANGE: Remove `size` from SingleGlitter and `maxWidth` and `maxHeight` instead.
+- **BREAKING CHANGE**
+    - Remove `size` from SingleGlitter and add `maxWidth` and `maxHeight` instead.
 
 ## 0.1.4
 

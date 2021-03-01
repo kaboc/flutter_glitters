@@ -4,7 +4,7 @@
 
 A glittering widget for Flutter.
 
-![Screencast](https://user-images.githubusercontent.com/20254485/83968159-29878f00-a902-11ea-8c95-320154181eb6.gif)
+![Screencast](https://user-images.githubusercontent.com/20254485/109614952-a6385880-7b76-11eb-8691-b1f2461f2d60.gif)
 
 ## What it does
 

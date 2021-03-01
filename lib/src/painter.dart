@@ -1,17 +1,16 @@
 import 'dart:math';
-import 'package:meta/meta.dart';
 import 'package:flutter/rendering.dart';
 
 import 'consts.dart';
 
 class GlitterPainter extends CustomPainter {
   GlitterPainter({
-    @required this.width,
-    @required this.height,
-    @required this.offset,
-    @required this.aspectRatio,
-    @required this.color,
-    @required this.opacity,
+    required this.width,
+    required this.height,
+    required this.offset,
+    required this.aspectRatio,
+    required this.color,
+    required this.opacity,
   });
 
   final double width;
