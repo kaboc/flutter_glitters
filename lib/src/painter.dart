@@ -6,16 +6,16 @@ import 'consts.dart';
 
 class GlitterPainter extends CustomPainter {
   GlitterPainter({
-    @required this.maxWidth,
-    @required this.maxHeight,
+    @required this.width,
+    @required this.height,
     @required this.offset,
     @required this.aspectRatio,
     @required this.color,
     @required this.opacity,
   });
 
-  final double maxWidth;
-  final double maxHeight;
+  final double width;
+  final double height;
   final Offset offset;
   final double aspectRatio;
   final Color color;
@@ -27,10 +27,6 @@ class GlitterPainter extends CustomPainter {
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 
-    final shrinkageRateX = min(1.0, aspectRatio);
-    final shrinkageRateY = min(1.0, 1.0 / aspectRatio);
-    final width = maxWidth * shrinkageRateX;
-    final height = maxHeight * shrinkageRateY;
     final center = Offset(offset.dx + width / 2, offset.dy + height / 2);
     final radius = min(width, height) * kCircleSizeRatio * 0.55;
 

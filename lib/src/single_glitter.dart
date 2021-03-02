@@ -44,16 +44,29 @@ class SingleGlitter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(size * aspectRatio, size),
-      painter: GlitterPainter(
-        maxWidth: size,
-        maxHeight: size,
-        offset: Offset.zero,
-        aspectRatio: aspectRatio,
-        color: color,
-        opacity: opacity,
+    final width = _calculateWidth(size, size, aspectRatio);
+    final height = _calculateHeight(size, size, aspectRatio);
+
+    return UnconstrainedBox(
+      child: CustomPaint(
+        size: Size(width, height),
+        painter: GlitterPainter(
+          width: width,
+          height: height,
+          offset: Offset.zero,
+          aspectRatio: aspectRatio,
+          color: color,
+          opacity: opacity,
+        ),
       ),
     );
+  }
+
+  double _calculateWidth(double width, double height, double aspectRatio) {
+    return width / height >= aspectRatio ? height * aspectRatio : width;
+  }
+
+  double _calculateHeight(double width, double height, double aspectRatio) {
+    return width / height >= aspectRatio ? height : width / aspectRatio;
   }
 }
