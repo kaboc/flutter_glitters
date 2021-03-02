@@ -11,16 +11,18 @@ import 'painter.dart';
 class SingleGlitter extends StatelessWidget {
   /// Creates a widget that draws a single static glitter-like shape.
   ///
-  /// A single glitter with the [color] is displayed at the [aspectRatio] to
-  /// fit the [size].
+  /// A single glitter with the [color] is displayed at the [aspectRatio]
+  /// to fit the [width] and [height].
   /// Unlike [Glitters], this has the fixed [opacity] and does not animate.
   const SingleGlitter({
     Key key,
-    this.size,
+    this.maxWidth,
+    this.maxHeight,
     double aspectRatio,
     Color color,
     double opacity,
-  })  : assert(size == null || size > 0.0),
+  })  : assert(maxWidth == null || maxWidth > 0.0),
+        assert(maxHeight == null || maxHeight > 0.0),
         assert(aspectRatio == null || aspectRatio > 0.0),
         assert(opacity == null || (opacity > 0.0 && opacity <= 1.0)),
         aspectRatio = aspectRatio ?? 1.0,
@@ -28,15 +30,25 @@ class SingleGlitter extends StatelessWidget {
         opacity = opacity ?? 1.0,
         super(key: key);
 
-  /// The widget is fitted into this [size].
+  /// The max width of the widget.
   ///
-  /// The widget is automatically sized to fit the available space if
+  /// The widget is automatically sized to fit the available width if
   /// this is omitted, in which case an error occurs if the widget is
   /// unconstrained.
   ///
-  /// When the [aspectRatio] is not `1.0`, either the width or the height of
-  /// the widget becomes smaller than the size.
-  final double size;
+  /// The actual width of the widget may become smaller depending on
+  /// the [height] and the [aspectRatio].
+  final double maxWidth;
+
+  /// The max height of the widget.
+  ///
+  /// The widget is automatically sized to fit the available height if
+  /// this is omitted, in which case an error occurs if the widget is
+  /// unconstrained.
+  ///
+  /// The actual height of the widget may become smaller depending on
+  /// the [width] and the [aspectRatio].
+  final double maxHeight;
 
   /// The aspect ratio (a ratio of width to height) of the widget.
   final double aspectRatio;
@@ -49,13 +61,16 @@ class SingleGlitter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return size == null
+    return maxWidth == null || maxHeight == null
         ? LayoutBuilder(
             builder: (context, constraints) {
-              return _paint(constraints.maxWidth, constraints.maxHeight);
+              return _paint(
+                maxWidth ?? constraints.maxWidth,
+                maxHeight ?? constraints.maxHeight,
+              );
             },
           )
-        : _paint(size, size);
+        : _paint(maxWidth, maxHeight);
   }
 
   Widget _paint(double maxWidth, double maxHeight) {

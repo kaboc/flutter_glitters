@@ -59,7 +59,10 @@ SizedBox(
 ```dart
 const ColoredBox(
   color: Colors.black,
-  child: SingleGlitter(size: 100.0),
+  child: SingleGlitter(
+    maxWidth: 100.0,
+    maxHeight: 100.0,
+  ),
 )
 ```
 
