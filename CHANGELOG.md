@@ -1,32 +1,32 @@
-## 0.1.4 - 23 October 2020
+## 0.1.4
 
-* Change minimum SDK version to 2.9.0 to be compatible with the latest Flutter version.
-* Update linter rules and change code accordingly (mainly removal of local variable types).
+- Change minimum SDK version to 2.9.0 to be compatible with the latest Flutter version.
+- Update linter rules and change code accordingly (mainly removal of local variable types).
 
-## 0.1.3 - 2 July 2020
+## 0.1.3
 
-* Update documentation.
-* Tweak circle size.
+- Update documentation.
+- Tweak circle size.
 
-## 0.1.2 - 1 July 2020
+## 0.1.2
 
-* Tweak minimum cross width.
-* Improve gradient/opacity of inner whitish circle.
-* Enable durations to be updated by Hot Reload. 
+- Tweak minimum cross width.
+- Improve gradient/opacity of inner whitish circle.
+- Enable durations to be updated by Hot Reload. 
 
-## 0.1.1 - 10 June 2020
+## 0.1.1
 
-* Improve handling of default sizes.
-* Update README.
+- Improve handling of default sizes.
+- Update README.
 
-## 0.1.0 - 7 June 2020
+## 0.1.0
 
-* Release as a public package.
+- Release as a public package.
 
-## 0.0.2 - 6 June 2020
+## 0.0.2
 
-* More real look with better shape and gradient.
+- More real look with better shape and gradient.
 
-## 0.0.1 - 5 June 2020
+## 0.0.1
 
-* Initial release
+- Initial release

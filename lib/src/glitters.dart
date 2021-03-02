@@ -8,7 +8,7 @@ import 'painter.dart';
 ///
 /// The size of the widget itself is calculated using the constraints obtained
 /// by [LayoutBuilder], and glitters are randomly positioned within the area.
-/// An error will occur if the widget is unconstrained.
+/// An error occurs if the widget is unconstrained.
 ///
 /// Only a single glitter is shown at a time. Stack multiple glitters to display
 /// them concurrently.
@@ -20,6 +20,8 @@ class Glitters extends StatefulWidget {
   /// It fades in and reaches [maxOpacity] over the duration of [inDuration],
   /// stays for the span of [duration], and then fades out over [outDuration].
   /// The next animation begins after a wait of [interval] duration.
+  ///
+  /// This widget looks better in a dark background color.
   const Glitters({
     Key key,
     double minSize,

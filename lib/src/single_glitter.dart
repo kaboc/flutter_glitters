@@ -14,6 +14,8 @@ class SingleGlitter extends StatelessWidget {
   /// A single glitter with the [color] is displayed at the [aspectRatio]
   /// to fit the [width] and [height].
   /// Unlike [Glitters], this has the fixed [opacity] and does not animate.
+  ///
+  /// This widget looks better in a dark background color.
   const SingleGlitter({
     Key key,
     this.maxWidth,
@@ -53,10 +55,10 @@ class SingleGlitter extends StatelessWidget {
   /// The aspect ratio (a ratio of width to height) of the widget.
   final double aspectRatio;
 
-  /// The opacity of the main parts of the widget.
+  /// The opacity of the color.
   final double opacity;
 
-  /// The main color of the widget.
+  /// The main color of the glitter shape.
   final Color color;
 
   @override
