@@ -224,8 +224,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
       builder: (_, __) => CustomPaint(
         size: Size(widget.constraints.maxWidth, widget.constraints.maxHeight),
         painter: GlitterPainter(
-          maxWidth: widget.size,
-          maxHeight: widget.size,
+          width: widget.size,
+          height: widget.size,
           offset: widget.offset,
           aspectRatio: kDefaultAspectRatio,
           color: widget.color,
