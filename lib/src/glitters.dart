@@ -127,8 +127,8 @@ class _GlittersState extends State<Glitters>
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, BoxConstraints constraints) {
-      final width = _size * kDefaultAspectRatio;
-      final height = _size;
+      final width = calculateWidth(_size, _size, kDefaultAspectRatio);
+      final height = calculateWidth(_size, _size, kDefaultAspectRatio);
 
       return _Paint(
         key: _key,

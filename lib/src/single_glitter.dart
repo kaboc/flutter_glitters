@@ -44,8 +44,8 @@ class SingleGlitter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = _calculateWidth(size, size, aspectRatio);
-    final height = _calculateHeight(size, size, aspectRatio);
+    final width = calculateWidth(size, size, aspectRatio);
+    final height = calculateHeight(size, size, aspectRatio);
 
     return UnconstrainedBox(
       child: CustomPaint(
@@ -60,13 +60,5 @@ class SingleGlitter extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  double _calculateWidth(double width, double height, double aspectRatio) {
-    return width / height >= aspectRatio ? height * aspectRatio : width;
-  }
-
-  double _calculateHeight(double width, double height, double aspectRatio) {
-    return width / height >= aspectRatio ? height : width / aspectRatio;
   }
 }

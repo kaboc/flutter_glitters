@@ -102,3 +102,11 @@ class GlitterPainter extends CustomPainter {
     return opacity != oldDelegate.opacity;
   }
 }
+
+double calculateWidth(double width, double height, double aspectRatio) {
+  return width / height >= aspectRatio ? height * aspectRatio : width;
+}
+
+double calculateHeight(double width, double height, double aspectRatio) {
+  return width / height >= aspectRatio ? height : width / aspectRatio;
+}
