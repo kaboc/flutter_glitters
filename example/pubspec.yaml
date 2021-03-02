@@ -1,5 +1,6 @@
 name: glitters_example
 description: An example of Glitters.
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:

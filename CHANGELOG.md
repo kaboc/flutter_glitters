@@ -1,3 +1,8 @@
+## 0.1.5
+
+- Fix wrong size of SingleGlitter (#1).
+- BREAKING CHANGE: Remove `size` from SingleGlitter and `maxWidth` and `maxHeight` instead.
+
 ## 0.1.4
 
 - Change minimum SDK version to 2.9.0 to be compatible with the latest Flutter version.
