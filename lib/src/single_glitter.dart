@@ -16,11 +16,11 @@ class SingleGlitter extends StatelessWidget {
   /// Unlike [Glitters], this has the fixed [opacity] and does not animate.
   const SingleGlitter({
     Key key,
-    @required this.size,
+    this.size,
     double aspectRatio,
     Color color,
     double opacity,
-  })  : assert(size != null && size > 0.0),
+  })  : assert(size == null || size > 0.0),
         assert(aspectRatio == null || aspectRatio > 0.0),
         assert(opacity == null || (opacity > 0.0 && opacity <= 1.0)),
         aspectRatio = aspectRatio ?? 1.0,
@@ -29,6 +29,11 @@ class SingleGlitter extends StatelessWidget {
         super(key: key);
 
   /// The widget is fitted into this [size].
+  ///
+  /// The widget is automatically sized to fit the available space if
+  /// this is omitted, in which case an error occurs if the widget is
+  /// unconstrained.
+  ///
   /// When the [aspectRatio] is not `1.0`, either the width or the height of
   /// the widget becomes smaller than the size.
   final double size;
@@ -44,8 +49,18 @@ class SingleGlitter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = calculateWidth(size, size, aspectRatio);
-    final height = calculateHeight(size, size, aspectRatio);
+    return size == null
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              return _paint(constraints.maxWidth, constraints.maxHeight);
+            },
+          )
+        : _paint(size, size);
+  }
+
+  Widget _paint(double maxWidth, double maxHeight) {
+    final width = calculateWidth(maxWidth, maxHeight, aspectRatio);
+    final height = calculateHeight(maxWidth, maxHeight, aspectRatio);
 
     return UnconstrainedBox(
       child: CustomPaint(

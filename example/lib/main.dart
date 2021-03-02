@@ -71,13 +71,8 @@ class App extends StatelessWidget {
                 Expanded(
                   child: ColoredBox(
                     color: Colors.blueGrey.shade700,
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return SingleGlitter(
-                          size: constraints.biggest.shortestSide,
-                          color: Colors.amber,
-                        );
-                      },
+                    child: const SingleGlitter(
+                      color: Colors.amber,
                     ),
                   ),
                 ),
