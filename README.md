@@ -8,25 +8,32 @@ A glittering widget for Flutter.
 
 ## What it does
 
-This package provides two types of widgets:
+This package provides three widgets:
 
 * [Glitters](https://pub.dev/documentation/glitters/latest/glitters/Glitters-class.html)
-    * The main widget of this package that fades in and out glitter-like shapes one by one inside itself. This is useful when you want some part of your app to look shiny.
+    * The main widget of this package that fades in and out glitter-like shapes one by one
+    inside itself. This is useful when you want some part of your app to look shiny.
+* [GlitterStack](https://pub.dev/documentation/glitters/latest/glitters/GlitterStack-class.html)
+    * A widget used to show multiple glitters by stacking them.
 * [SingleGlitter](https://pub.dev/documentation/glitters/latest/single_glitter/SingleGlitter-class.html)
-    * Just an extra widget to draw a single static glitter-like shape.
+    * A widget to show a single static glitter-like shape.
 
 ## Code examples
 
 **Simplest**
 
 ```dart
-const ColoredBox(
+Container(
+  width: 200.0,
+  height: 200.0,
   color: Colors.black,
-  child: Glitters(),
+  child: const Glitters(),
 )
 ```
 
 **Multiple glitters**
+
+With `Stack`:
 
 ```dart
 SizedBox(
@@ -37,14 +44,14 @@ SizedBox(
     child: Stack(
       children: const [
         Glitters(
-          interval: Duration(milliseconds: 300),
+          interval: Duration(milliseconds: 200),
           maxOpacity: 0.7,
           color: Colors.orange,
         ),
         Glitters(
           duration: Duration(milliseconds: 200),
-          outDuration: Duration(milliseconds: 500),
           interval: Duration.zero,
+          delay: Duration(milliseconds: 100),
           color: Colors.white,
           maxOpacity: 0.5,
         ),
@@ -52,6 +59,30 @@ SizedBox(
     ),
   ),
 )
+```
+
+With `GlitterStack`:
+
+```dart
+const GlitterStack(
+  width: 200.0,
+  height: 200.0,
+  backgroundColor: Colors.black,
+  // You can set common settings for multiple glitters.
+  duration: Duration(milliseconds: 200),
+  interval: Duration.zero,
+  color: Colors.white,
+  maxOpacity: 0.5,
+  children: [
+    Glitters(
+      maxOpacity: 0.7,
+      color: Colors.orange,
+    ),
+    Glitters(
+      delay: Duration(milliseconds: 100),
+    ),
+  ],
+),
 ```
 
 **A single static glitter**

@@ -1,10 +1,17 @@
-## 0.2.0
+# 0.3.0
+
+- Add `delay` to `Glitters`.
+- Add `GlitterStack` widget.
+- Prevent glitters offsets from being changed by rebuilds.
+- Remove dependency on meta.
+
+# 0.2.0
 
 - Migrate to null safety.
 
 ## 0.1.5
 
-- Fix wrong size of SingleGlitter (#1).
+- Fix wrong size of `SingleGlitter` (#1).
 - **BREAKING CHANGE**
     - Remove `size` from SingleGlitter and add `maxWidth` and `maxHeight` instead.
 
@@ -22,7 +29,7 @@
 
 - Tweak minimum cross width.
 - Improve gradient/opacity of inner whitish circle.
-- Enable durations to be updated by Hot Reload. 
+- Enable durations to be updated by hot reload. 
 
 ## 0.1.1
 
