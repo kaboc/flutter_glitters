@@ -77,6 +77,8 @@ class _GlittersState extends State<Glitters>
   late AnimationController _controller;
   late double _size;
   late Key _key;
+  late double _randX;
+  late double _randY;
 
   Duration get _duration =>
       widget.duration +
@@ -144,8 +146,8 @@ class _GlittersState extends State<Glitters>
         constraints: constraints,
         size: _size,
         offset: Offset(
-          Random().nextDouble() * (constraints.maxWidth - width),
-          Random().nextDouble() * (constraints.maxHeight - height),
+          _randX * (constraints.maxWidth - width),
+          _randY * (constraints.maxHeight - height),
         ),
         duration: widget.duration,
         inDuration: widget.inDuration,
@@ -161,6 +163,8 @@ class _GlittersState extends State<Glitters>
       _key = UniqueKey();
       _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
           widget.minSize;
+      _randX = Random().nextDouble();
+      _randY = Random().nextDouble();
     });
   }
 }
