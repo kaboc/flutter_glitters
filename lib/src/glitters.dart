@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'consts.dart';
 import 'painter.dart';
+import 'stack.dart';
 
 /// A widget that fades in and out glitter-like shapes one by one inside itself.
 ///
@@ -10,8 +11,8 @@ import 'painter.dart';
 /// by [LayoutBuilder], and glitters are randomly positioned within the area.
 /// An error occurs if the widget is unconstrained.
 ///
-/// Only a single glitter is shown at a time. Stack multiple glitters to display
-/// them concurrently.
+/// Only a single glitter is shown at a time. Stack multiple glitters with
+/// [GlitterStack] to display them concurrently.
 class Glitters extends StatefulWidget {
   /// Creates a widget that fades in and out glitter-like shapes one by one.
   ///
@@ -20,53 +21,59 @@ class Glitters extends StatefulWidget {
   /// It fades in and reaches [maxOpacity] over the duration of [inDuration],
   /// stays for the span of [duration], and then fades out over [outDuration].
   /// The next animation begins after a wait of [interval] duration.
+  /// The start of animation can be delayed with [delay].
+  ///
+  /// You can set common settings for multiple [Glitters] widgets using the
+  /// parameters with the same name in [GlitterStack] as the ones in this
+  /// widget.
   ///
   /// This widget looks better in a dark background color.
   const Glitters({
     Key? key,
-    this.minSize = kDefaultSize,
-    double? maxSize,
-    this.duration = kDefaultDuration,
-    this.inDuration = kDefaultInDuration,
-    this.outDuration = kDefaultOutDuration,
-    this.interval = kDefaultInterval,
+    this.minSize,
+    this.maxSize,
+    this.duration,
+    this.inDuration,
+    this.outDuration,
+    this.interval,
     this.delay = Duration.zero,
-    this.color = kDefaultColor,
-    this.maxOpacity = 1.0,
-  })  : assert(minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
-        assert(maxSize == null || (maxSize > 0.0 && minSize <= maxSize)),
-        assert(maxOpacity > 0.0 && maxOpacity <= 1.0),
-        maxSize = maxSize ?? minSize,
+    this.color,
+    this.maxOpacity,
+  })  : assert(minSize == null ||
+            minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
+        assert(maxSize == null ||
+            maxSize > 0.0 && (minSize == null || minSize <= maxSize)),
+        assert(maxOpacity == null || maxOpacity > 0.0 && maxOpacity <= 1.0),
         super(key: key);
 
   /// The minimum size of a glitter shown inside the widget.
-  final double minSize;
+  final double? minSize;
 
   /// The maximum size of a glitter shown inside the widget.
-  final double maxSize;
+  final double? maxSize;
 
   /// The duration in which a glitter is shown with the maximum opacity.
   /// This does not include the durations of fade-in/out and the interval
   /// between glitters.
-  final Duration duration;
+  final Duration? duration;
 
   /// The duration over which a glitter fades in.
-  final Duration inDuration;
+  final Duration? inDuration;
 
   /// The duration over which a glitter fades out.
-  final Duration outDuration;
+  final Duration? outDuration;
 
-  /// The duration of a wait between each glitter and the next.
-  final Duration interval;
+  /// The duration of the wait between a glitter and the next.
+  final Duration? interval;
 
   /// The duration of the wait before animation starts.
   final Duration delay;
 
   /// The main color of glitters.
-  final Color color;
+  final Color? color;
 
-  /// The maximum opacity that glitters fade in up to and out from.
-  final double maxOpacity;
+  /// The maximum opacity that a glitter fades in up to and out from.
+  final double? maxOpacity;
 
   @override
   _GlittersState createState() => _GlittersState();
@@ -74,23 +81,31 @@ class Glitters extends StatefulWidget {
 
 class _GlittersState extends State<Glitters>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late double _size;
+  late final AnimationController _controller;
   late Key _key;
+  late double _size;
   late double _randX;
   late double _randY;
 
-  Duration get _duration =>
-      widget.duration +
-      widget.inDuration +
-      widget.outDuration +
-      widget.interval;
+  late double _minSize;
+  late double _maxSize;
+  late Duration _duration;
+  late Duration _inDuration;
+  late Duration _outDuration;
+  late Duration _interval;
+  late Color _color;
+  late double _maxOpacity;
+
+  Duration get _totalDuration =>
+      _duration + _inDuration + _outDuration + _interval;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(vsync: this, duration: _duration)
+    _initializeParams();
+
+    _controller = AnimationController(vsync: this, duration: _totalDuration)
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           _renew();
@@ -108,15 +123,14 @@ class _GlittersState extends State<Glitters>
   void didUpdateWidget(Glitters oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.duration != oldWidget.duration ||
-        widget.inDuration != oldWidget.inDuration ||
-        widget.outDuration != oldWidget.outDuration ||
-        widget.interval != oldWidget.interval ||
-        widget.delay != oldWidget.delay) {
+    final hasChanges = _updateParams();
+    print(hasChanges);
+
+    if (hasChanges) {
       _controller
         ..stop()
         ..reset()
-        ..duration = _duration;
+        ..duration = _totalDuration;
 
       Future<void>.delayed(widget.delay, () {
         _renew();
@@ -129,6 +143,42 @@ class _GlittersState extends State<Glitters>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _initializeParams() {
+    final stack = context.findAncestorWidgetOfExactType<GlitterStack>();
+
+    _minSize = stack?.minSize ?? widget.minSize ?? kDefaultSize;
+    _maxSize = stack?.maxSize ?? widget.maxSize ?? _minSize;
+    _duration = stack?.duration ?? widget.duration ?? kDefaultDuration;
+    _inDuration = stack?.inDuration ?? widget.inDuration ?? kDefaultInDuration;
+    _outDuration =
+        stack?.outDuration ?? widget.outDuration ?? kDefaultOutDuration;
+    _interval = stack?.interval ?? widget.interval ?? kDefaultInterval;
+    _color = stack?.color ?? widget.color ?? kDefaultColor;
+    _maxOpacity = stack?.maxOpacity ?? widget.maxOpacity ?? 1.0;
+  }
+
+  bool _updateParams() {
+    final minSize = _minSize;
+    final maxSize = _maxSize;
+    final duration = _duration;
+    final inDuration = _inDuration;
+    final outDuration = _outDuration;
+    final interval = _interval;
+    final color = _color;
+    final maxOpacity = _maxOpacity;
+
+    _initializeParams();
+
+    return _minSize != minSize ||
+        _maxSize != maxSize ||
+        _duration != duration ||
+        _inDuration != inDuration ||
+        _outDuration != outDuration ||
+        _interval != interval ||
+        _color != color ||
+        _maxOpacity != maxOpacity;
   }
 
   @override
@@ -149,11 +199,11 @@ class _GlittersState extends State<Glitters>
           _randX * (constraints.maxWidth - width),
           _randY * (constraints.maxHeight - height),
         ),
-        duration: widget.duration,
-        inDuration: widget.inDuration,
-        outDuration: widget.outDuration,
-        color: widget.color,
-        maxOpacity: widget.maxOpacity,
+        duration: _duration,
+        inDuration: _inDuration,
+        outDuration: _outDuration,
+        color: _color,
+        maxOpacity: _maxOpacity,
       );
     });
   }
@@ -161,8 +211,7 @@ class _GlittersState extends State<Glitters>
   void _renew() {
     setState(() {
       _key = UniqueKey();
-      _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
-          widget.minSize;
+      _size = Random().nextDouble() * (_maxSize - _minSize) + _minSize;
       _randX = Random().nextDouble();
       _randY = Random().nextDouble();
     });
