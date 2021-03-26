@@ -9,4 +9,3 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  meta: ^1.3.0
