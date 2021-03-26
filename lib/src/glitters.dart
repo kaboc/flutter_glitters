@@ -30,6 +30,7 @@ class Glitters extends StatefulWidget {
     this.inDuration = kDefaultInDuration,
     this.outDuration = kDefaultOutDuration,
     this.interval = kDefaultInterval,
+    this.delay = Duration.zero,
     this.color = kDefaultColor,
     this.maxOpacity = 1.0,
   })  : assert(minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
@@ -57,6 +58,9 @@ class Glitters extends StatefulWidget {
 
   /// The duration of a wait between each glitter and the next.
   final Duration interval;
+
+  /// The duration of the wait before animation starts.
+  final Duration delay;
 
   /// The main color of glitters.
   final Color color;
@@ -90,10 +94,12 @@ class _GlittersState extends State<Glitters>
           _renew();
           _controller.forward(from: 0.0);
         }
-      })
-      ..forward();
+      });
 
-    _renew();
+    Future<void>.delayed(widget.delay, () {
+      _renew();
+      _controller.forward();
+    });
   }
 
   @override
@@ -103,11 +109,17 @@ class _GlittersState extends State<Glitters>
     if (widget.duration != oldWidget.duration ||
         widget.inDuration != oldWidget.inDuration ||
         widget.outDuration != oldWidget.outDuration ||
-        widget.interval != oldWidget.interval) {
+        widget.interval != oldWidget.interval ||
+        widget.delay != oldWidget.delay) {
       _controller
         ..stop()
-        ..duration = _duration
-        ..forward(from: 0.0);
+        ..reset()
+        ..duration = _duration;
+
+      Future<void>.delayed(widget.delay, () {
+        _renew();
+        _controller.forward();
+      });
     }
   }
 
@@ -119,7 +131,11 @@ class _GlittersState extends State<Glitters>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, BoxConstraints constraints) {
+    if (!_controller.isAnimating) {
+      return const SizedBox.expand();
+    }
+
+    return LayoutBuilder(builder: (_, constraints) {
       final width = calculateWidth(_size, _size, kDefaultAspectRatio);
       final height = calculateWidth(_size, _size, kDefaultAspectRatio);
 
