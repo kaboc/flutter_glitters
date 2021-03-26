@@ -1,3 +1,7 @@
+# 0.3.1
+
+- Minor fixes.
+
 # 0.3.0
 
 - Add `delay` to `Glitters`.

@@ -10,13 +10,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Glitters';
-
     return MaterialApp(
-      title: appTitle,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(appTitle),
+          title: const Text('Glitters'),
           backgroundColor: Colors.grey.shade700,
         ),
         body: SafeArea(
@@ -37,7 +34,7 @@ class App extends StatelessWidget {
                     duration: Duration(milliseconds: 300),
                     inDuration: Duration(milliseconds: 300),
                     outDuration: Duration(milliseconds: 300),
-                    // maxOpacity: 0.5,
+                    maxOpacity: 0.7,
                     children: [
                       Glitters(),
                       Glitters(

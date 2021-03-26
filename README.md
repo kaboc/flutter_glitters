@@ -44,16 +44,17 @@ SizedBox(
     child: Stack(
       children: const [
         Glitters(
-          interval: Duration(milliseconds: 200),
-          maxOpacity: 0.7,
+          duration: Duration(milliseconds: 200),
+          interval: Duration.zero,
           color: Colors.orange,
+          maxOpacity: 0.7,
         ),
         Glitters(
           duration: Duration(milliseconds: 200),
           interval: Duration.zero,
           delay: Duration(milliseconds: 100),
           color: Colors.white,
-          maxOpacity: 0.5,
+          maxOpacity: 0.7,
         ),
       ],
     ),
@@ -72,17 +73,16 @@ const GlitterStack(
   duration: Duration(milliseconds: 200),
   interval: Duration.zero,
   color: Colors.white,
-  maxOpacity: 0.5,
+  maxOpacity: 0.7,
   children: [
     Glitters(
-      maxOpacity: 0.7,
       color: Colors.orange,
     ),
     Glitters(
       delay: Duration(milliseconds: 100),
     ),
   ],
-),
+)
 ```
 
 **A single static glitter**

@@ -124,8 +124,6 @@ class _GlittersState extends State<Glitters>
     super.didUpdateWidget(oldWidget);
 
     final hasChanges = _updateParams();
-    print(hasChanges);
-
     if (hasChanges) {
       _controller
         ..stop()
