@@ -146,15 +146,15 @@ class _GlittersState extends State<Glitters>
   void _initializeParams() {
     final stack = context.findAncestorWidgetOfExactType<GlitterStack>();
 
-    _minSize = stack?.minSize ?? widget.minSize ?? kDefaultSize;
-    _maxSize = stack?.maxSize ?? widget.maxSize ?? _minSize;
-    _duration = stack?.duration ?? widget.duration ?? kDefaultDuration;
-    _inDuration = stack?.inDuration ?? widget.inDuration ?? kDefaultInDuration;
+    _minSize = widget.minSize ?? stack?.minSize ?? kDefaultSize;
+    _maxSize = widget.maxSize ?? stack?.maxSize ?? _minSize;
+    _duration = widget.duration ?? stack?.duration ?? kDefaultDuration;
+    _inDuration = widget.inDuration ?? stack?.inDuration ?? kDefaultInDuration;
     _outDuration =
-        stack?.outDuration ?? widget.outDuration ?? kDefaultOutDuration;
-    _interval = stack?.interval ?? widget.interval ?? kDefaultInterval;
-    _color = stack?.color ?? widget.color ?? kDefaultColor;
-    _maxOpacity = stack?.maxOpacity ?? widget.maxOpacity ?? 1.0;
+        widget.outDuration ?? stack?.outDuration ?? kDefaultOutDuration;
+    _interval = widget.interval ?? stack?.interval ?? kDefaultInterval;
+    _color = widget.color ?? stack?.color ?? kDefaultColor;
+    _maxOpacity = widget.maxOpacity ?? stack?.maxOpacity ?? 1.0;
   }
 
   bool _updateParams() {
