@@ -79,14 +79,7 @@ class Glitters extends StatefulWidget {
   _GlittersState createState() => _GlittersState();
 }
 
-class _GlittersState extends State<Glitters>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late Key _key;
-  late double _size;
-  late double _randX;
-  late double _randY;
-
+class _GlittersState extends State<Glitters> {
   late double _minSize;
   late double _maxSize;
   late Duration _duration;
@@ -96,51 +89,16 @@ class _GlittersState extends State<Glitters>
   late Color _color;
   late double _maxOpacity;
 
-  Duration get _totalDuration =>
-      _duration + _inDuration + _outDuration + _interval;
-
   @override
   void initState() {
     super.initState();
-
     _initializeParams();
-
-    _controller = AnimationController(vsync: this, duration: _totalDuration)
-      ..addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.completed) {
-          _renew();
-          _controller.forward(from: 0.0);
-        }
-      });
-
-    Future<void>.delayed(widget.delay, () {
-      _renew();
-      _controller.forward();
-    });
   }
 
   @override
   void didUpdateWidget(Glitters oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    final hasChanges = _updateParams();
-    if (hasChanges) {
-      _controller
-        ..stop()
-        ..reset()
-        ..duration = _totalDuration;
-
-      Future<void>.delayed(widget.delay, () {
-        _renew();
-        _controller.forward();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    _initializeParams();
   }
 
   void _initializeParams() {
@@ -157,84 +115,47 @@ class _GlittersState extends State<Glitters>
     _maxOpacity = widget.maxOpacity ?? stack?.maxOpacity ?? 1.0;
   }
 
-  bool _updateParams() {
-    final minSize = _minSize;
-    final maxSize = _maxSize;
-    final duration = _duration;
-    final inDuration = _inDuration;
-    final outDuration = _outDuration;
-    final interval = _interval;
-    final color = _color;
-    final maxOpacity = _maxOpacity;
-
-    _initializeParams();
-
-    return _minSize != minSize ||
-        _maxSize != maxSize ||
-        _duration != duration ||
-        _inDuration != inDuration ||
-        _outDuration != outDuration ||
-        _interval != interval ||
-        _color != color ||
-        _maxOpacity != maxOpacity;
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (!_controller.isAnimating) {
-      return const SizedBox.expand();
-    }
-
     return LayoutBuilder(builder: (_, constraints) {
-      final width = calculateWidth(_size, _size, kDefaultAspectRatio);
-      final height = calculateWidth(_size, _size, kDefaultAspectRatio);
-
       return _Paint(
-        key: _key,
         constraints: constraints,
-        size: _size,
-        offset: Offset(
-          _randX * (constraints.maxWidth - width),
-          _randY * (constraints.maxHeight - height),
-        ),
+        minSize: _minSize,
+        maxSize: _maxSize,
         duration: _duration,
         inDuration: _inDuration,
         outDuration: _outDuration,
+        interval: _interval,
+        delay: widget.delay,
         color: _color,
         maxOpacity: _maxOpacity,
       );
-    });
-  }
-
-  void _renew() {
-    setState(() {
-      _key = UniqueKey();
-      _size = Random().nextDouble() * (_maxSize - _minSize) + _minSize;
-      _randX = Random().nextDouble();
-      _randY = Random().nextDouble();
     });
   }
 }
 
 class _Paint extends StatefulWidget {
   const _Paint({
-    Key? key,
     required this.constraints,
-    required this.size,
-    required this.offset,
+    required this.minSize,
+    required this.maxSize,
     required this.duration,
     required this.inDuration,
     required this.outDuration,
+    required this.interval,
+    required this.delay,
     required this.color,
     required this.maxOpacity,
-  }) : super(key: key);
+  });
 
   final BoxConstraints constraints;
-  final double size;
-  final Offset offset;
+  final double minSize;
+  final double maxSize;
   final Duration duration;
   final Duration inDuration;
   final Duration outDuration;
+  final Duration interval;
+  final Duration delay;
   final Color color;
   final double maxOpacity;
 
@@ -246,29 +167,75 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _opacity;
 
+  late double _size;
+  late Offset _offset;
+
+  Duration get _totalDuration =>
+      widget.duration +
+      widget.inDuration +
+      widget.outDuration +
+      widget.interval;
+
   @override
   void initState() {
     super.initState();
 
-    final duration = widget.duration + widget.inDuration + widget.outDuration;
+    _controller = AnimationController(vsync: this, duration: _totalDuration)
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          _updateGlitter();
+          _controller.forward(from: 0.0);
+        }
+      });
 
-    _controller = AnimationController(vsync: this, duration: duration)
-      ..forward();
+    Future<void>.delayed(widget.delay, () {
+      _updateGlitter();
+      _controller.forward();
+    });
 
     _opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.0, end: widget.maxOpacity),
-        weight: widget.inDuration.inMilliseconds / duration.inMilliseconds,
+        weight:
+            widget.inDuration.inMilliseconds / _totalDuration.inMilliseconds,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: widget.maxOpacity, end: widget.maxOpacity),
-        weight: widget.duration.inMilliseconds / duration.inMilliseconds,
+        weight: widget.duration.inMilliseconds / _totalDuration.inMilliseconds,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: widget.maxOpacity, end: 0.0),
-        weight: widget.outDuration.inMilliseconds / duration.inMilliseconds,
+        weight:
+            widget.outDuration.inMilliseconds / _totalDuration.inMilliseconds,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.0, end: 0.0),
+        weight: widget.interval.inMilliseconds / _totalDuration.inMilliseconds,
       ),
     ]).animate(_controller);
+  }
+
+  @override
+  void didUpdateWidget(_Paint oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final hasChanges = widget.duration != oldWidget.duration ||
+        widget.inDuration != oldWidget.inDuration ||
+        widget.outDuration != oldWidget.outDuration ||
+        widget.interval != oldWidget.interval ||
+        widget.delay != oldWidget.delay;
+
+    if (hasChanges) {
+      _controller
+        ..stop()
+        ..reset()
+        ..duration = _totalDuration;
+
+      Future<void>.delayed(widget.delay, () {
+        _updateGlitter();
+        _controller.forward();
+      });
+    }
   }
 
   @override
@@ -279,19 +246,34 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    if (!_controller.isAnimating) {
+      return const SizedBox.expand();
+    }
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (_, __) => CustomPaint(
         size: Size(widget.constraints.maxWidth, widget.constraints.maxHeight),
         painter: GlitterPainter(
-          width: widget.size,
-          height: widget.size,
-          offset: widget.offset,
-          aspectRatio: kDefaultAspectRatio,
+          width: _size,
+          height: _size,
+          offset: _offset,
+          aspectRatio: 1.0,
           color: widget.color,
           opacity: _opacity.value,
         ),
       ),
     );
+  }
+
+  void _updateGlitter() {
+    setState(() {
+      _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
+          widget.minSize;
+      _offset = Offset(
+        Random().nextDouble() * (widget.constraints.maxWidth - _size),
+        Random().nextDouble() * (widget.constraints.maxHeight - _size),
+      );
+    });
   }
 }
