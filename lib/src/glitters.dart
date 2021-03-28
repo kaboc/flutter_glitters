@@ -5,6 +5,12 @@ import 'consts.dart';
 import 'painter.dart';
 import 'stack.dart';
 
+enum _Status {
+  notInitialized,
+  initialized,
+  updated,
+}
+
 /// A widget that fades in and out glitter-like shapes one by one inside itself.
 ///
 /// The size of the widget itself is calculated using the constraints obtained
@@ -113,6 +119,8 @@ class _GlittersState extends State<Glitters> {
     _interval = widget.interval ?? stack?.interval ?? kDefaultInterval;
     _color = widget.color ?? stack?.color ?? kDefaultColor;
     _maxOpacity = widget.maxOpacity ?? stack?.maxOpacity ?? 1.0;
+
+    assert(widget.delay < _duration + _inDuration + _outDuration + _interval);
   }
 
   @override
@@ -165,10 +173,11 @@ class _Paint extends StatefulWidget {
 
 class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late final Animation<double> _opacity;
 
   late double _size;
   late Offset _offset;
+
+  var _status = _Status.notInitialized;
 
   Duration get _totalDuration =>
       widget.duration +
@@ -181,19 +190,94 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(vsync: this, duration: _totalDuration)
-      ..addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.completed) {
-          _updateGlitter();
+      ..addStatusListener((animationStatus) {
+        if (animationStatus == AnimationStatus.completed) {
+          _status = _Status.initialized;
           _controller.forward(from: 0.0);
         }
-      });
+      })
+      ..forward();
+  }
 
-    Future<void>.delayed(widget.delay, () {
-      _updateGlitter();
-      _controller.forward();
-    });
+  @override
+  void didUpdateWidget(_Paint oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    _opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
+    final hasChanges = widget.duration != oldWidget.duration ||
+        widget.inDuration != oldWidget.inDuration ||
+        widget.outDuration != oldWidget.outDuration ||
+        widget.interval != oldWidget.interval;
+
+    if (hasChanges) {
+      _status = _Status.initialized;
+      _controller
+        ..stop()
+        ..reset()
+        ..duration = _totalDuration
+        ..forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tween = _tween();
+    final from = widget.delay.inMilliseconds / _totalDuration.inMilliseconds;
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, __) {
+        final v = _controller.value;
+        final t = v <= 1.0 - from ? v + from : v - (1.0 - from);
+        final opacity = tween.transform(t);
+        _updateGlitter(widget.constraints, opacity);
+
+        return _status == _Status.notInitialized
+            ? const SizedBox.shrink()
+            : CustomPaint(
+                size: Size(
+                  widget.constraints.maxWidth,
+                  widget.constraints.maxHeight,
+                ),
+                painter: GlitterPainter(
+                  width: _size,
+                  height: _size,
+                  offset: _offset,
+                  aspectRatio: 1.0,
+                  color: widget.color,
+                  opacity: opacity,
+                ),
+              );
+      },
+    );
+  }
+
+  void _updateGlitter(BoxConstraints constraints, double opacity) {
+    final isFirstTimeWithNoDelay =
+        _status == _Status.notInitialized && widget.delay == Duration.zero;
+    final needUpdate = _status != _Status.updated && opacity == 0.0;
+
+    if (isFirstTimeWithNoDelay || needUpdate) {
+      _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
+          widget.minSize;
+      _offset = Offset(
+        Random().nextDouble() * (constraints.maxWidth - _size),
+        Random().nextDouble() * (constraints.maxHeight - _size),
+      );
+
+      _status = _status == _Status.notInitialized
+          ? _Status.initialized
+          : _Status.updated;
+    }
+  }
+
+  Animatable<double> _tween() {
+    return TweenSequence<double>([
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.0, end: widget.maxOpacity),
         weight:
@@ -212,68 +296,6 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         tween: Tween<double>(begin: 0.0, end: 0.0),
         weight: widget.interval.inMilliseconds / _totalDuration.inMilliseconds,
       ),
-    ]).animate(_controller);
-  }
-
-  @override
-  void didUpdateWidget(_Paint oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    final hasChanges = widget.duration != oldWidget.duration ||
-        widget.inDuration != oldWidget.inDuration ||
-        widget.outDuration != oldWidget.outDuration ||
-        widget.interval != oldWidget.interval ||
-        widget.delay != oldWidget.delay;
-
-    if (hasChanges) {
-      _controller
-        ..stop()
-        ..reset()
-        ..duration = _totalDuration;
-
-      Future<void>.delayed(widget.delay, () {
-        _updateGlitter();
-        _controller.forward();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_controller.isAnimating) {
-      return const SizedBox.expand();
-    }
-
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, __) => CustomPaint(
-        size: Size(widget.constraints.maxWidth, widget.constraints.maxHeight),
-        painter: GlitterPainter(
-          width: _size,
-          height: _size,
-          offset: _offset,
-          aspectRatio: 1.0,
-          color: widget.color,
-          opacity: _opacity.value,
-        ),
-      ),
-    );
-  }
-
-  void _updateGlitter() {
-    setState(() {
-      _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
-          widget.minSize;
-      _offset = Offset(
-        Random().nextDouble() * (widget.constraints.maxWidth - _size),
-        Random().nextDouble() * (widget.constraints.maxHeight - _size),
-      );
-    });
+    ]);
   }
 }
