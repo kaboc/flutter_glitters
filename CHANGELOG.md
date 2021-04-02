@@ -1,21 +1,27 @@
-# 0.3.1
+## 0.3.2
+
+- Fix issue where values set in Glitters were overwritten by those set in GlitterStack.
+- Fix issue of delay disappearing once app goes to background. (#3)
+- Refactoring of glitters.dart.
+
+## 0.3.1
 
 - Minor fixes.
 
-# 0.3.0
+## 0.3.0
 
 - Add `delay` to `Glitters`.
 - Add `GlitterStack` widget.
 - Prevent glitters offsets from being changed by rebuilds.
 - Remove dependency on meta.
 
-# 0.2.0
+## 0.2.0
 
 - Migrate to null safety.
 
 ## 0.1.5
 
-- Fix wrong size of `SingleGlitter` (#1).
+- Fix wrong size of `SingleGlitter`. (#1)
 - **BREAKING CHANGE**
     - Remove `size` from SingleGlitter and add `maxWidth` and `maxHeight` instead.
 

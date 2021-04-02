@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:glitters/glitters.dart';
 import 'package:glitters/single_glitter.dart';
@@ -14,7 +15,9 @@ class App extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Glitters'),
+          backwardsCompatibility: false,
           backgroundColor: Colors.grey.shade700,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: SafeArea(
           child: Padding(
