@@ -125,6 +125,10 @@ class _GlittersState extends State<Glitters> {
 
   @override
   Widget build(BuildContext context) {
+    // Writing this in the initializer list causes an error
+    // regardless of the duration value for some unknown reason.
+    assert(widget.duration == null || widget.duration != Duration.zero);
+
     return LayoutBuilder(builder: (_, constraints) {
       return _Paint(
         constraints: constraints,
@@ -278,6 +282,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
 
   Animatable<double> _tween() {
     return TweenSequence<double>([
+      if (widget.inDuration != Duration.zero)
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.0, end: widget.maxOpacity),
         weight:
@@ -287,14 +292,17 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         tween: Tween<double>(begin: widget.maxOpacity, end: widget.maxOpacity),
         weight: widget.duration.inMilliseconds / _totalDuration.inMilliseconds,
       ),
+      if (widget.outDuration != Duration.zero)
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: widget.maxOpacity, end: 0.0),
         weight:
             widget.outDuration.inMilliseconds / _totalDuration.inMilliseconds,
       ),
+      if (widget.interval != Duration.zero)
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.0, end: 0.0),
-        weight: widget.interval.inMilliseconds / _totalDuration.inMilliseconds,
+          weight:
+              widget.interval.inMilliseconds / _totalDuration.inMilliseconds,
       ),
     ]);
   }

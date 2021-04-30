@@ -93,6 +93,10 @@ class GlitterStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Writing this in the initializer list causes an error
+    // regardless of the duration value for some unknown reason.
+    assert(duration == null || duration != Duration.zero);
+
     return SizedBox(
       width: width,
       height: height,
