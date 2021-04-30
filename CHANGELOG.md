@@ -1,3 +1,8 @@
+## 0.3.3
+
+- Prevent invalid duration values and related errors.
+- Fix issue of using properties sometimes before they are lazily initialised.
+
 ## 0.3.2
 
 - Fix issue where values set in Glitters were overwritten by those set in GlitterStack.
