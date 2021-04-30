@@ -239,7 +239,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         final v = _controller.value;
         final t = v <= 1.0 - from ? v + from : v - (1.0 - from);
         final opacity = tween.transform(t);
-        _updateGlitter(widget.constraints, opacity);
+        _updateGlitter(widget.constraints, from, t);
 
         return _status == _Status.notInitialized
             ? const SizedBox.shrink()
@@ -261,49 +261,51 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _updateGlitter(BoxConstraints constraints, double opacity) {
+  void _updateGlitter(BoxConstraints constraints, double from, double t) {
+    final hasNoDelay = widget.delay == Duration.zero;
+    final isBeginning = (hasNoDelay || t < from) && t >= 0.0;
+
     final isFirstTimeWithNoDelay =
-        _status == _Status.notInitialized && widget.delay == Duration.zero;
-    final needUpdate = _status != _Status.updated && opacity == 0.0;
+        _status == _Status.notInitialized && hasNoDelay;
+    final needUpdate = _status != _Status.updated && isBeginning;
 
     if (isFirstTimeWithNoDelay || needUpdate) {
       _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
           widget.minSize;
+
       _offset = Offset(
         Random().nextDouble() * (constraints.maxWidth - _size),
         Random().nextDouble() * (constraints.maxHeight - _size),
       );
 
-      _status = _status == _Status.notInitialized
-          ? _Status.initialized
-          : _Status.updated;
+      _status = _Status.updated;
     }
   }
 
   Animatable<double> _tween() {
     return TweenSequence<double>([
       if (widget.inDuration != Duration.zero)
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 0.0, end: widget.maxOpacity),
-        weight:
-            widget.inDuration.inMilliseconds / _totalDuration.inMilliseconds,
-      ),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: 0.0, end: widget.maxOpacity),
+          weight:
+              widget.inDuration.inMilliseconds / _totalDuration.inMilliseconds,
+        ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: widget.maxOpacity, end: widget.maxOpacity),
         weight: widget.duration.inMilliseconds / _totalDuration.inMilliseconds,
       ),
       if (widget.outDuration != Duration.zero)
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: widget.maxOpacity, end: 0.0),
-        weight:
-            widget.outDuration.inMilliseconds / _totalDuration.inMilliseconds,
-      ),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: widget.maxOpacity, end: 0.0),
+          weight:
+              widget.outDuration.inMilliseconds / _totalDuration.inMilliseconds,
+        ),
       if (widget.interval != Duration.zero)
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 0.0, end: 0.0),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: 0.0, end: 0.0),
           weight:
               widget.interval.inMilliseconds / _totalDuration.inMilliseconds,
-      ),
+        ),
     ]);
   }
 }
