@@ -5,11 +5,6 @@ import 'consts.dart';
 import 'painter.dart';
 import 'stack.dart';
 
-enum _Status {
-  notInitialized,
-  updated,
-}
-
 /// A widget that fades in and out glitter-like shapes one by one inside itself.
 ///
 /// The size of the widget itself is calculated using the constraints obtained
@@ -180,7 +175,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late double _size;
   late Offset _offset;
 
-  var _status = _Status.notInitialized;
+  var _isReady = false;
   var _prevT = 0.0;
 
   Duration get _totalDuration =>
@@ -234,9 +229,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         final opacity = tween.transform(t);
         _updateGlitter(widget.constraints, from, t);
 
-        return _status == _Status.notInitialized
-            ? const SizedBox.shrink()
-            : CustomPaint(
+        return _isReady
+            ? CustomPaint(
                 size: Size(
                   widget.constraints.maxWidth,
                   widget.constraints.maxHeight,
@@ -249,7 +243,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
                   color: widget.color,
                   opacity: opacity,
                 ),
-              );
+              )
+            : const SizedBox.shrink();
       },
     );
   }
@@ -268,7 +263,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         Random().nextDouble() * (constraints.maxHeight - _size),
       );
 
-      _status = _Status.updated;
+      _isReady = true;
     }
   }
 
