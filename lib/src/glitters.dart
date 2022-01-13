@@ -7,7 +7,6 @@ import 'stack.dart';
 
 enum _Status {
   notInitialized,
-  initialized,
   updated,
 }
 
@@ -195,15 +194,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(vsync: this, duration: _totalDuration)
-      ..addStatusListener((animationStatus) {
-        if (animationStatus == AnimationStatus.completed) {
-          if (_status == _Status.updated) {
-            _status = _Status.initialized;
-          }
-          _controller.forward(from: 0.0);
-        }
-      })
-      ..forward();
+      ..repeat();
   }
 
   @override
@@ -220,7 +211,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         ..stop()
         ..reset()
         ..duration = _totalDuration
-        ..forward();
+        ..repeat();
     }
   }
 
