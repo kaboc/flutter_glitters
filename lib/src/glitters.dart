@@ -5,12 +5,6 @@ import 'consts.dart';
 import 'painter.dart';
 import 'stack.dart';
 
-enum _Status {
-  notInitialized,
-  initialized,
-  updated,
-}
-
 /// A widget that fades in and out glitter-like shapes one by one inside itself.
 ///
 /// The size of the widget itself is calculated using the constraints obtained
@@ -181,7 +175,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late double _size;
   late Offset _offset;
 
-  var _status = _Status.notInitialized;
+  var _isReady = false;
+  var _prevT = 0.0;
 
   Duration get _totalDuration =>
       widget.duration +
@@ -194,15 +189,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(vsync: this, duration: _totalDuration)
-      ..addStatusListener((animationStatus) {
-        if (animationStatus == AnimationStatus.completed) {
-          if (_status == _Status.updated) {
-            _status = _Status.initialized;
-          }
-          _controller.forward(from: 0.0);
-        }
-      })
-      ..forward();
+      ..repeat();
   }
 
   @override
@@ -219,7 +206,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         ..stop()
         ..reset()
         ..duration = _totalDuration
-        ..forward();
+        ..repeat();
     }
   }
 
@@ -240,11 +227,11 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         final v = _controller.value;
         final t = v <= 1.0 - from ? v + from : v - (1.0 - from);
         final opacity = tween.transform(t);
-        _updateGlitter(widget.constraints, from, t);
 
-        return _status == _Status.notInitialized
-            ? const SizedBox.shrink()
-            : CustomPaint(
+        _renewGlitterIfNecessary(widget.constraints, from, t);
+
+        return _isReady
+            ? CustomPaint(
                 size: Size(
                   widget.constraints.maxWidth,
                   widget.constraints.maxHeight,
@@ -257,20 +244,22 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
                   color: widget.color,
                   opacity: opacity,
                 ),
-              );
+              )
+            : const SizedBox.shrink();
       },
     );
   }
 
-  void _updateGlitter(BoxConstraints constraints, double from, double t) {
-    final hasNoDelay = widget.delay == Duration.zero;
-    final isBeginning = (hasNoDelay || t < from) && t >= 0.0;
+  void _renewGlitterIfNecessary(
+    BoxConstraints constraints,
+    double from,
+    double t,
+  ) {
+    final isBeginningWithNoDelay = widget.delay == Duration.zero && t == 0.0;
+    final isBeginning = t < _prevT;
+    _prevT = t;
 
-    final isFirstTimeWithNoDelay =
-        _status == _Status.notInitialized && hasNoDelay;
-    final needUpdate = _status != _Status.updated && isBeginning;
-
-    if (isFirstTimeWithNoDelay || needUpdate) {
+    if (isBeginningWithNoDelay || isBeginning) {
       _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
           widget.minSize;
 
@@ -279,7 +268,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         Random().nextDouble() * (constraints.maxHeight - _size),
       );
 
-      _status = _Status.updated;
+      _isReady = true;
     }
   }
 
