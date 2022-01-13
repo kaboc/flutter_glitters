@@ -196,7 +196,9 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     _controller = AnimationController(vsync: this, duration: _totalDuration)
       ..addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
-          _status = _Status.initialized;
+          if (_status == _Status.updated) {
+            _status = _Status.initialized;
+          }
           _controller.forward(from: 0.0);
         }
       })
@@ -213,7 +215,6 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         widget.interval != oldWidget.interval;
 
     if (hasChanges) {
-      _status = _Status.initialized;
       _controller
         ..stop()
         ..reset()
