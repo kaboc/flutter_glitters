@@ -182,6 +182,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late Offset _offset;
 
   var _status = _Status.notInitialized;
+  var _prevT = 0.0;
 
   Duration get _totalDuration =>
       widget.duration +
@@ -263,14 +264,11 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   }
 
   void _updateGlitter(BoxConstraints constraints, double from, double t) {
-    final hasNoDelay = widget.delay == Duration.zero;
-    final isBeginning = (hasNoDelay || t < from) && t >= 0.0;
+    final isBeginningWithNoDelay = widget.delay == Duration.zero && t == 0.0;
+    final isBeginning = t < _prevT;
+    _prevT = t;
 
-    final isFirstTimeWithNoDelay =
-        _status == _Status.notInitialized && hasNoDelay;
-    final needUpdate = _status != _Status.updated && isBeginning;
-
-    if (isFirstTimeWithNoDelay || needUpdate) {
+    if (isBeginningWithNoDelay || isBeginning) {
       _size = Random().nextDouble() * (widget.maxSize - widget.minSize) +
           widget.minSize;
 
