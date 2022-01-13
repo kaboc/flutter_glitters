@@ -227,7 +227,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
         final v = _controller.value;
         final t = v <= 1.0 - from ? v + from : v - (1.0 - from);
         final opacity = tween.transform(t);
-        _updateGlitter(widget.constraints, from, t);
+
+        _renewGlitterIfNecessary(widget.constraints, from, t);
 
         return _isReady
             ? CustomPaint(
@@ -249,7 +250,11 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _updateGlitter(BoxConstraints constraints, double from, double t) {
+  void _renewGlitterIfNecessary(
+    BoxConstraints constraints,
+    double from,
+    double t,
+  ) {
     final isBeginningWithNoDelay = widget.delay == Duration.zero && t == 0.0;
     final isBeginning = t < _prevT;
     _prevT = t;
