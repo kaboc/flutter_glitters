@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:glitters/glitters.dart';
 import 'package:glitters/single_glitter.dart';
+
+const _kBackgroundColor = Color(0xFF424242);
 
 void main() => runApp(const App());
 
@@ -12,12 +13,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.from(
+        colorScheme: const ColorScheme.dark(primary: _kBackgroundColor),
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Glitters'),
-          backwardsCompatibility: false,
-          backgroundColor: Colors.grey.shade700,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: SafeArea(
           child: Padding(
@@ -30,7 +31,7 @@ class App extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: GlitterStack(
-                    backgroundColor: Color(0xFF455A64),
+                    backgroundColor: _kBackgroundColor,
                     minSize: 15.0,
                     maxSize: 30.0,
                     interval: Duration(milliseconds: 300),
@@ -60,7 +61,7 @@ class App extends StatelessWidget {
                 SizedBox(height: 4.0),
                 Expanded(
                   child: ColoredBox(
-                    color: Color(0xFF455A64),
+                    color: _kBackgroundColor,
                     child: SingleGlitter(
                       color: Colors.amber,
                     ),

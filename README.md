@@ -1,5 +1,3 @@
-# Glitters
-
 [![Pub Version](https://img.shields.io/pub/v/glitters)](https://pub.dev/packages/glitters)
 
 A glittering widget for Flutter.

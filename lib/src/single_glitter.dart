@@ -12,7 +12,7 @@ class SingleGlitter extends StatelessWidget {
   /// Creates a widget that draws a single static glitter-like shape.
   ///
   /// A single glitter with the [color] is displayed at the [aspectRatio]
-  /// to fit the [width] and [height].
+  /// to fit the [maxWidth] and [maxHeight].
   /// Unlike [Glitters], this has the fixed [opacity] and does not animate.
   ///
   /// This widget looks better in a dark background color.
@@ -36,7 +36,7 @@ class SingleGlitter extends StatelessWidget {
   /// unconstrained.
   ///
   /// The actual width of the widget may become smaller depending on
-  /// the [height] and the [aspectRatio].
+  /// the [maxHeight] and the [aspectRatio].
   final double? maxWidth;
 
   /// The max height of the widget.
@@ -46,7 +46,7 @@ class SingleGlitter extends StatelessWidget {
   /// unconstrained.
   ///
   /// The actual height of the widget may become smaller depending on
-  /// the [width] and the [aspectRatio].
+  /// the [maxWidth] and the [aspectRatio].
   final double? maxHeight;
 
   /// The aspect ratio (a ratio of width to height) of the widget.

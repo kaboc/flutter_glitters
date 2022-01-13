@@ -1,3 +1,10 @@
+## 0.3.4
+
+- Fix LateInitializationError. (#7)
+- Ensure that a glitter with a delay is shown even if the delay is very small. (#9)
+- Fix broken links in the document of `SingleGlitter`.
+- Change the theme color of the example app.
+
 ## 0.3.3
 
 - Prevent invalid duration values and related errors.
