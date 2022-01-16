@@ -44,6 +44,67 @@ class Glitters extends StatefulWidget {
         assert(maxSize == null ||
             maxSize > 0.0 && (minSize == null || minSize <= maxSize)),
         assert(maxOpacity == null || maxOpacity > 0.0 && maxOpacity <= 1.0),
+        icon = null,
+        child = null,
+        super(key: key);
+
+  /// Creates a widget that fades icons in and out one by one inside itself.
+  ///
+  /// The only difference with the default constructor is that this one
+  /// shows an icon instead of a pre-defined glitter-like shape. Use the
+  /// [icon] parameter for setting the icon to be shown.
+  ///
+  /// For details of parameters, see the document of the default constructor.
+  const Glitters.icon({
+    Key? key,
+    this.minSize,
+    this.maxSize,
+    this.duration,
+    this.inDuration,
+    this.outDuration,
+    this.interval,
+    this.delay = Duration.zero,
+    this.color,
+    this.maxOpacity,
+    required IconData icon,
+  })  : assert(minSize == null ||
+            minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
+        assert(maxSize == null ||
+            maxSize > 0.0 && (minSize == null || minSize <= maxSize)),
+        assert(maxOpacity == null || maxOpacity > 0.0 && maxOpacity <= 1.0),
+        // ignore: prefer_initializing_formals
+        icon = icon,
+        child = null,
+        super(key: key);
+
+  /// Creates a widget that fades widgets in and out one by one inside itself.
+  ///
+  /// The only differences with the default constructor are that this one
+  /// shows a widget instead of a pre-defined glitter-like shape and that
+  /// this does not accept a color. Use the [child] parameter for setting
+  /// the widget to be shown.
+  ///
+  /// For details of parameters, see the document of the default constructor.
+  const Glitters.widget({
+    Key? key,
+    this.minSize,
+    this.maxSize,
+    this.duration,
+    this.inDuration,
+    this.outDuration,
+    this.interval,
+    this.delay = Duration.zero,
+    this.maxOpacity,
+    required Widget child,
+  })  : assert(minSize == null ||
+            minSize > 0.0 && (maxSize == null || maxSize >= minSize)),
+        assert(maxSize == null ||
+            maxSize > 0.0 && (minSize == null || minSize <= maxSize)),
+        assert(maxOpacity == null || maxOpacity > 0.0 && maxOpacity <= 1.0),
+        // ignore: prefer_initializing_formals
+        child = child,
+        color = null,
+        icon = null,
         super(key: key);
 
   /// The minimum size of a glitter shown inside the widget.
@@ -70,10 +131,18 @@ class Glitters extends StatefulWidget {
   final Duration delay;
 
   /// The main color of glitters.
+  ///
+  /// This is not available in the [Glitters.widget] constructor.
   final Color? color;
 
   /// The maximum opacity that a glitter fades in up to and out from.
   final double? maxOpacity;
+
+  /// The icon data to use instead of the predefined glitter shape.
+  final IconData? icon;
+
+  /// The widget to use instead of the predefined glitter shape.
+  final Widget? child;
 
   @override
   _GlittersState createState() => _GlittersState();
@@ -135,6 +204,8 @@ class _GlittersState extends State<Glitters> {
         delay: widget.delay,
         color: _color,
         maxOpacity: _maxOpacity,
+        icon: widget.icon,
+        child: widget.child,
       );
     });
   }
@@ -152,6 +223,8 @@ class _Paint extends StatefulWidget {
     required this.delay,
     required this.color,
     required this.maxOpacity,
+    this.icon,
+    this.child,
   });
 
   final BoxConstraints constraints;
@@ -164,6 +237,8 @@ class _Paint extends StatefulWidget {
   final Duration delay;
   final Color color;
   final double maxOpacity;
+  final IconData? icon;
+  final Widget? child;
 
   @override
   _PaintState createState() => _PaintState();
@@ -230,7 +305,11 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
 
         _renewGlitterIfNecessary(widget.constraints, from, t);
 
-        return _isReady
+        if (!_isReady) {
+          return const SizedBox.shrink();
+        }
+
+        return widget.icon == null && widget.child == null
             ? CustomPaint(
                 size: Size(
                   widget.constraints.maxWidth,
@@ -245,7 +324,25 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
                   opacity: opacity,
                 ),
               )
-            : const SizedBox.shrink();
+            : Transform.translate(
+                offset: _offset,
+                child: widget.child == null
+                    ? Icon(
+                        widget.icon,
+                        size: _size,
+                        color: widget.color.withOpacity(opacity),
+                      )
+                    : SizedBox.square(
+                        dimension: _size,
+                        // Replacing Opacity with AnimatedOpacity may
+                        // improve performance, Opacity is used here
+                        // to avoid bringing more complexity.
+                        child: Opacity(
+                          opacity: opacity,
+                          child: widget.child!,
+                        ),
+                      ),
+              );
       },
     );
   }
