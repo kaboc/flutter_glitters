@@ -2,7 +2,8 @@
 
 A glittering widget for Flutter.
 
-![Screencast](https://user-images.githubusercontent.com/20254485/109614952-a6385880-7b76-11eb-8691-b1f2461f2d60.gif)
+<img src="https://user-images.githubusercontent.com/20254485/149648366-496be181-bab7-4c0c-b930-2a82274a7436.gif" width="360">
+<img src="https://user-images.githubusercontent.com/20254485/149598957-2c0334e0-7ab7-44ab-af28-fb8bda520034.gif" width="360">
 
 ## What it does
 
@@ -15,6 +16,33 @@ This package provides three widgets:
     * A widget used to show multiple glitters by stacking them.
 * [SingleGlitter](https://pub.dev/documentation/glitters/latest/single_glitter/SingleGlitter-class.html)
     * A widget to show a single static glitter-like shape.
+
+## Shape
+
+### Pre-defined glitter-like figure
+
+```dart
+const Glitters()
+```
+
+### Icon
+
+```dart
+const Glitters.icon(
+  icon: Icons.star,
+)
+```
+
+### Widget
+
+The `Glitters.widget` constructor has no color parameter.  
+This may be a little less performant compared to glitters shown with other constructors.
+
+```dart
+const Glitters.widget(
+  child: Image.asset('assets/xxxxxx.png'),
+)
+```
 
 ## Code examples
 
