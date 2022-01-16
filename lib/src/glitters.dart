@@ -114,6 +114,7 @@ class Glitters extends StatefulWidget {
   final double? maxSize;
 
   /// The duration in which a glitter is shown with the maximum opacity.
+  ///
   /// This does not include the durations of fade-in/out and the interval
   /// between glitters.
   final Duration? duration;
@@ -131,6 +132,8 @@ class Glitters extends StatefulWidget {
   final Duration delay;
 
   /// The main color of glitters.
+  ///
+  /// The alpha value in the color is ignored.
   ///
   /// This is not available in the [Glitters.widget] constructor.
   final Color? color;
@@ -335,7 +338,7 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
                     : SizedBox.square(
                         dimension: _size,
                         // Replacing Opacity with AnimatedOpacity may
-                        // improve performance, Opacity is used here
+                        // improve performance, but Opacity is used here
                         // to avoid bringing more complexity.
                         child: Opacity(
                           opacity: opacity,

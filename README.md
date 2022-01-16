@@ -2,8 +2,8 @@
 
 A glittering widget for Flutter.
 
-<img src="https://user-images.githubusercontent.com/20254485/149648366-496be181-bab7-4c0c-b930-2a82274a7436.gif" width="360">
-<img src="https://user-images.githubusercontent.com/20254485/149598957-2c0334e0-7ab7-44ab-af28-fb8bda520034.gif" width="360">
+![Screenshot 1](https://user-images.githubusercontent.com/20254485/149648366-496be181-bab7-4c0c-b930-2a82274a7436.gif)
+![Screenshot 2](https://user-images.githubusercontent.com/20254485/149598957-2c0334e0-7ab7-44ab-af28-fb8bda520034.gif)
 
 ## What it does
 
@@ -46,7 +46,7 @@ const Glitters.widget(
 
 ## Code examples
 
-**Simplest**
+### Simplest
 
 ```dart
 Container(
@@ -57,7 +57,7 @@ Container(
 )
 ```
 
-**Multiple glitters**
+### Multiple glitters
 
 With `Stack`:
 
@@ -111,7 +111,7 @@ const GlitterStack(
 )
 ```
 
-**A single static glitter**
+### A single static glitter
 
 ```dart
 const ColoredBox(

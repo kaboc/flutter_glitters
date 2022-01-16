@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Add .icon and .widget constructors to `Glitters`. (#12)
+
 ## 0.3.4
 
 - Fix LateInitializationError. (#7)
