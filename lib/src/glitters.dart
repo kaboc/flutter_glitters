@@ -250,8 +250,8 @@ class _Paint extends StatefulWidget {
 class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
-  late double _size;
-  late Offset _offset;
+  double? _size;
+  Offset? _offset;
 
   var _isReady = false;
   var _prevT = 0.0;
@@ -319,9 +319,9 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
                   widget.constraints.maxHeight,
                 ),
                 painter: GlitterPainter(
-                  width: _size,
-                  height: _size,
-                  offset: _offset,
+                  width: _size ?? kDefaultSize,
+                  height: _size ?? kDefaultSize,
+                  offset: _offset ?? Offset.zero,
                   aspectRatio: 1.0,
                   color: widget.color,
                   opacity: opacity,
@@ -364,8 +364,8 @@ class _PaintState extends State<_Paint> with SingleTickerProviderStateMixin {
           widget.minSize;
 
       _offset = Offset(
-        Random().nextDouble() * (constraints.maxWidth - _size),
-        Random().nextDouble() * (constraints.maxHeight - _size),
+        Random().nextDouble() * (constraints.maxWidth - (_size ?? kDefaultSize)),
+        Random().nextDouble() * (constraints.maxHeight - (_size ?? kDefaultSize)),
       );
 
       _isReady = true;
